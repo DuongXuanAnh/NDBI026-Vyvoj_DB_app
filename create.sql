@@ -6,7 +6,7 @@ CREATE TABLE jidelni_listek (
     cena DECIMAL(8,2) NOT NULL
 );
 
-CREATE INDEX idx_jidelni_listek_nazev
+CREATE OR REPLACE INDEX idx_jidelni_listek_nazev
 ON jidelni_listek (nazev);
 
 -- Tabulka objednavka
@@ -33,7 +33,7 @@ CREATE TABLE objednavka_jidel (
 CREATE TABLE stoly (
     id NUMBER PRIMARY KEY,
     pocet_mist NUMBER NOT NULL,
-    umisteni VARCHAR2(100)
+    umisteni VARCHAR2(100) NOT NULL
 );
 
 -- Tabulka pozice
@@ -46,7 +46,7 @@ CREATE TABLE pozice (
 CREATE TABLE zamestnanci (
     id NUMBER PRIMARY KEY,
     jmeno VARCHAR2(100) NOT NULL,
-    pozice_id NUMBER,
+    pozice_id NUMBER NOT NULL,
     FOREIGN KEY (pozice_id) REFERENCES pozice(id)
 );
 
@@ -87,6 +87,10 @@ CREATE SEQUENCE dodavatel_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 CREATE SEQUENCE stoly_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 CREATE SEQUENCE pozice_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 CREATE SEQUENCE zamestnanci_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
+
+-- reset id 
+--DROP SEQUENCE pozice_seq;
+--CREATE SEQUENCE pozice_seq START WITH 1 INCREMENT BY 1;
 
 CREATE OR REPLACE TRIGGER jidelni_listek_trigger
 BEFORE INSERT ON jidelni_listek
@@ -163,8 +167,13 @@ AS
         p_umisteni IN stoly.umisteni%TYPE
     );
 
-     PROCEDURE insert_pozice(
+    PROCEDURE insert_pozice(
         p_nazev IN pozice.nazev%TYPE
+    );
+
+    PROCEDURE insert_zamestnanci(
+        p_jmeno IN zamestnanci.jmeno%TYPE,
+        p_pozice_id IN zamestnanci.pozice_id%TYPE
     );
     
     PROCEDURE insert_dodavatel(
@@ -204,6 +213,16 @@ AS
         INSERT INTO pozice (nazev)
         VALUES (p_nazev);
     END insert_pozice;
+
+      PROCEDURE insert_zamestnanci(
+        p_jmeno IN zamestnanci.jmeno%TYPE,
+        p_pozice_id IN zamestnanci.pozice_id%TYPE
+    )
+    IS
+    BEGIN
+        INSERT INTO zamestnanci (jmeno, pozice_id)
+        VALUES (p_jmeno, p_pozice_id);
+    END insert_zamestnanci;
     
     PROCEDURE insert_dodavatel(
         p_nazev IN dodavatel.nazev%TYPE,

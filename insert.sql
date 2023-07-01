@@ -26,12 +26,17 @@ EXECUTE insert_package.insert_stoly(10, 'Na terase');
 
 -- Pozice zamestnancu
 EXECUTE insert_package.insert_pozice('Manažer');
-EXECUTE insert_package.insert_pozice('Asistent manažera');
-EXECUTE insert_package.insert_pozice('Hlavní kuchař');
 EXECUTE insert_package.insert_pozice('Kuchař');
 EXECUTE insert_package.insert_pozice('Číšník');
 EXECUTE insert_package.insert_pozice('Barman');
 
+-- Zamestnanci
+EXECUTE insert_package.insert_zamestnanci('Jan Novák', 1);
+EXECUTE insert_package.insert_zamestnanci('Jana Svobodová', 2);
+EXECUTE insert_package.insert_zamestnanci('Petr Dvořák', 3);
+EXECUTE insert_package.insert_zamestnanci('Lucie Jelínková', 3);
+EXECUTE insert_package.insert_zamestnanci('Martin Černý', 4);
+EXECUTE insert_package.insert_zamestnanci('Eva Němcová', 4);
 
 
 DELETE FROM JIDELNI_LISTEK;
