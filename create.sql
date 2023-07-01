@@ -134,27 +134,41 @@ END;
 CREATE OR REPLACE package insert_package
 AS
     PROCEDURE insert_jidelni_listek(
-        p_id IN jidelni_listek.id%TYPE,
         p_nazev IN jidelni_listek.nazev%TYPE,
         p_popis IN jidelni_listek.popis%TYPE,
         p_cena IN jidelni_listek.cena%TYPE
     );
+    
+    PROCEDURE insert_dodavatel(
+        p_nazev IN dodavatel.nazev%TYPE,
+        p_kontakt IN dodavatel.kontakt%TYPE
+    );
 END insert_package;
 /
 
-CREATE OR REPLACE PACKAGE BODY insert_package
+CREATE OR REPLACE package body insert_package
 AS
     PROCEDURE insert_jidelni_listek(
-        p_id IN jidelni_listek.id%TYPE,
         p_nazev IN jidelni_listek.nazev%TYPE,
         p_popis IN jidelni_listek.popis%TYPE,
         p_cena IN jidelni_listek.cena%TYPE
     )
-    AS
+    IS
     BEGIN
-        INSERT INTO jidelni_listek (id, nazev, popis, cena)
-        VALUES (p_id, p_nazev, p_popis, p_cena);
+        INSERT INTO jidelni_listek (nazev, popis, cena)
+        VALUES (p_nazev, p_popis, p_cena);
     END insert_jidelni_listek;
+    
+    PROCEDURE insert_dodavatel(
+        p_nazev IN dodavatel.nazev%TYPE,
+        p_kontakt IN dodavatel.kontakt%TYPE
+    )
+    IS
+    BEGIN
+        INSERT INTO dodavatel (nazev, kontakt)
+        VALUES (p_nazev, p_kontakt);
+    END insert_dodavatel;
+
 END insert_package;
 /
 
