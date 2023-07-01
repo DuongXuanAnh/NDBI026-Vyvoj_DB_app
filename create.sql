@@ -36,15 +36,22 @@ CREATE TABLE stoly (
     umisteni VARCHAR2(100)
 );
 
+-- Tabulka pozice
+CREATE TABLE pozice (
+    id NUMBER PRIMARY KEY,
+    nazev VARCHAR2(100) NOT NULL
+);
+
 -- Tabulka zamestnancu
 CREATE TABLE zamestnanci (
     id NUMBER PRIMARY KEY,
     jmeno VARCHAR2(100) NOT NULL,
-    pozice VARCHAR2(100) NOT NULL
+    pozice_id NUMBER,
+    FOREIGN KEY (pozice_id) REFERENCES pozice(id)
 );
 
 CREATE INDEX idx_zamestnanci_pozice
-ON zamestnanci (pozice);
+ON zamestnanci (pozice_id);
 
 -- Tabulka denni_trzby
 CREATE TABLE denni_trzby (
@@ -71,12 +78,14 @@ CREATE TABLE dodavatel (
 CREATE INDEX idx_dodavatel_nazev
 ON dodavatel (nazev);
 
+
 ----------------------------------------------------------------------
 -- Autogenerate ID pomoci sekvence a triggery
 CREATE SEQUENCE jidelni_listek_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 CREATE SEQUENCE objednavka_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 CREATE SEQUENCE dodavatel_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 CREATE SEQUENCE stoly_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
+CREATE SEQUENCE pozice_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 CREATE SEQUENCE zamestnanci_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 
 CREATE OR REPLACE TRIGGER jidelni_listek_trigger
@@ -104,6 +113,16 @@ BEFORE INSERT ON stoly
 FOR EACH ROW
 BEGIN
   SELECT stoly_seq.NEXTVAL
+  INTO :new.id
+  FROM dual;
+END;
+/
+
+CREATE OR REPLACE TRIGGER pozice_trigger
+BEFORE INSERT ON pozice
+FOR EACH ROW
+BEGIN
+  SELECT pozice_seq.NEXTVAL
   INTO :new.id
   FROM dual;
 END;
@@ -143,6 +162,10 @@ AS
         p_pocet_mist IN stoly.pocet_mist%TYPE,
         p_umisteni IN stoly.umisteni%TYPE
     );
+
+     PROCEDURE insert_pozice(
+        p_nazev IN pozice.nazev%TYPE
+    );
     
     PROCEDURE insert_dodavatel(
         p_nazev IN dodavatel.nazev%TYPE,
@@ -164,7 +187,7 @@ AS
         VALUES (p_nazev, p_popis, p_cena);
     END insert_jidelni_listek;
 
-     PROCEDURE insert_stoly(
+    PROCEDURE insert_stoly(
         p_pocet_mist IN stoly.pocet_mist%TYPE,
         p_umisteni IN stoly.umisteni%TYPE
     ) IS
@@ -172,6 +195,15 @@ AS
         INSERT INTO stoly (pocet_mist, umisteni)
         VALUES (p_pocet_mist, p_umisteni);
     END insert_stoly;
+
+    PROCEDURE insert_pozice(
+        p_nazev IN pozice.nazev%TYPE
+    )
+    IS
+    BEGIN
+        INSERT INTO pozice (nazev)
+        VALUES (p_nazev);
+    END insert_pozice;
     
     PROCEDURE insert_dodavatel(
         p_nazev IN dodavatel.nazev%TYPE,

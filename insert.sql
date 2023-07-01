@@ -24,6 +24,14 @@ EXECUTE insert_package.insert_stoly(6, 'Vedle baru');
 EXECUTE insert_package.insert_stoly(4, 'V předsíni');
 EXECUTE insert_package.insert_stoly(10, 'Na terase');
 
+-- Pozice zamestnancu
+EXECUTE insert_package.insert_pozice('Manažer');
+EXECUTE insert_package.insert_pozice('Asistent manažera');
+EXECUTE insert_package.insert_pozice('Hlavní kuchař');
+EXECUTE insert_package.insert_pozice('Kuchař');
+EXECUTE insert_package.insert_pozice('Číšník');
+EXECUTE insert_package.insert_pozice('Barman');
+
 
 
 DELETE FROM JIDELNI_LISTEK;
