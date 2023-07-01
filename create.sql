@@ -138,6 +138,11 @@ AS
         p_popis IN jidelni_listek.popis%TYPE,
         p_cena IN jidelni_listek.cena%TYPE
     );
+
+    PROCEDURE insert_stoly(
+        p_pocet_mist IN stoly.pocet_mist%TYPE,
+        p_umisteni IN stoly.umisteni%TYPE
+    );
     
     PROCEDURE insert_dodavatel(
         p_nazev IN dodavatel.nazev%TYPE,
@@ -158,6 +163,15 @@ AS
         INSERT INTO jidelni_listek (nazev, popis, cena)
         VALUES (p_nazev, p_popis, p_cena);
     END insert_jidelni_listek;
+
+     PROCEDURE insert_stoly(
+        p_pocet_mist IN stoly.pocet_mist%TYPE,
+        p_umisteni IN stoly.umisteni%TYPE
+    ) IS
+    BEGIN
+        INSERT INTO stoly (pocet_mist, umisteni)
+        VALUES (p_pocet_mist, p_umisteni);
+    END insert_stoly;
     
     PROCEDURE insert_dodavatel(
         p_nazev IN dodavatel.nazev%TYPE,
@@ -171,10 +185,4 @@ AS
 
 END insert_package;
 /
-
-
-
-
-
-
 
