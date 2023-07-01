@@ -73,10 +73,11 @@ ON dodavatel (nazev);
 
 ----------------------------------------------------------------------
 -- Autogenerate ID pomoci sekvence a triggery
-CREATE SEQUENCE jidelni_listek_seq
-    START WITH 1
-    INCREMENT BY 1
-    NOMAXVALUE;
+CREATE SEQUENCE jidelni_listek_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
+CREATE SEQUENCE objednavka_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
+CREATE SEQUENCE dodavatel_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
+CREATE SEQUENCE stoly_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
+CREATE SEQUENCE zamestnanci_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 
 CREATE OR REPLACE TRIGGER jidelni_listek_trigger
 BEFORE INSERT ON jidelni_listek
@@ -86,13 +87,54 @@ BEGIN
   INTO :new.id
   FROM dual;
 END;
+
+/
+CREATE OR REPLACE TRIGGER objednavka_trigger
+BEFORE INSERT ON objednavka
+FOR EACH ROW
+BEGIN
+  SELECT objednavka_seq.NEXTVAL
+  INTO :new.id
+  FROM dual;
+END;
 /
 
-----------------------------------------------------------------------
+CREATE OR REPLACE TRIGGER stoly_trigger
+BEFORE INSERT ON stoly
+FOR EACH ROW
+BEGIN
+  SELECT stoly_seq.NEXTVAL
+  INTO :new.id
+  FROM dual;
+END;
+/
+
+CREATE OR REPLACE TRIGGER zamestnanci_trigger
+BEFORE INSERT ON zamestnanci
+FOR EACH ROW
+BEGIN
+  SELECT zamestnanci_seq.NEXTVAL
+  INTO :new.id
+  FROM dual;
+END;
+/
+
+CREATE OR REPLACE TRIGGER dodavatel_trigger
+BEFORE INSERT ON dodavatel
+FOR EACH ROW
+BEGIN
+  SELECT dodavatel_seq.NEXTVAL
+  INTO :new.id
+  FROM dual;
+END;
+/
+
+---------------------------------------------------------------------
 
 CREATE OR REPLACE package insert_package
 AS
     PROCEDURE insert_jidelni_listek(
+        p_id IN jidelni_listek.id%TYPE,
         p_nazev IN jidelni_listek.nazev%TYPE,
         p_popis IN jidelni_listek.popis%TYPE,
         p_cena IN jidelni_listek.cena%TYPE
@@ -102,18 +144,23 @@ END insert_package;
 
 CREATE OR REPLACE PACKAGE BODY insert_package
 AS
-    PROCEDURE insert_jidelni_listek(p_nazev IN jidelni_listek.nazev%TYPE,
-                                    p_popis IN jidelni_listek.popis%TYPE,
-                                    p_cena IN jidelni_listek.cena%TYPE)
+    PROCEDURE insert_jidelni_listek(
+        p_id IN jidelni_listek.id%TYPE,
+        p_nazev IN jidelni_listek.nazev%TYPE,
+        p_popis IN jidelni_listek.popis%TYPE,
+        p_cena IN jidelni_listek.cena%TYPE
+    )
     AS
     BEGIN
-        INSERT INTO jidelni_listek (nazev, popis, cena)
-        VALUES (p_nazev, p_popis, p_cena);
+        INSERT INTO jidelni_listek (id, nazev, popis, cena)
+        VALUES (p_id, p_nazev, p_popis, p_cena);
     END insert_jidelni_listek;
-    
-    -- Další procedury
 END insert_package;
 /
+
+
+
+
 
 
 
