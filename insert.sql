@@ -38,8 +38,24 @@ EXECUTE insert_package.insert_zamestnanci('Lucie Jelínková', 3);
 EXECUTE insert_package.insert_zamestnanci('Martin Černý', 4);
 EXECUTE insert_package.insert_zamestnanci('Eva Němcová', 4);
 
+-- Plat zamestancu
+EXECUTE insert_package.insert_plat_zamestnancu(1, 1, 2023, 100000);
+EXECUTE insert_package.insert_plat_zamestnancu(2, 1, 2023, 80000);
+EXECUTE insert_package.insert_plat_zamestnancu(3, 1, 2023, 40000);
+EXECUTE insert_package.insert_plat_zamestnancu(4, 1, 2023, 40000);
+EXECUTE insert_package.insert_plat_zamestnancu(5, 1, 2023, 45000);
+EXECUTE insert_package.insert_plat_zamestnancu(6, 1, 2023, 45000);
+EXECUTE insert_package.insert_plat_zamestnancu(1, 2, 2023, 100000);
+EXECUTE insert_package.insert_plat_zamestnancu(2, 2, 2023, 80000);
+EXECUTE insert_package.insert_plat_zamestnancu(3, 2, 2023, 40000);
+EXECUTE insert_package.insert_plat_zamestnancu(4, 2, 2023, 40000);
+EXECUTE insert_package.insert_plat_zamestnancu(5, 2, 2023, 45000);
+EXECUTE insert_package.insert_plat_zamestnancu(6, 2, 2023, 45000);
+
 
 DELETE FROM JIDELNI_LISTEK;
 SELECT * FROM JIDELNI_LISTEK;
 SELECT * FROM DODAVATEL;
 SELECT * FROM stoly;
+SELECT * FROM pozice;
+SELECT * FROM zamestnanci;

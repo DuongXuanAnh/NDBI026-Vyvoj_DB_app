@@ -6,7 +6,7 @@ CREATE TABLE jidelni_listek (
     cena DECIMAL(8,2) NOT NULL
 );
 
-CREATE OR REPLACE INDEX idx_jidelni_listek_nazev
+CREATE INDEX idx_jidelni_listek_nazev
 ON jidelni_listek (nazev);
 
 -- Tabulka objednavka
@@ -62,7 +62,8 @@ CREATE TABLE denni_trzby (
 -- Tabulka plat_zamestnancu
 CREATE TABLE plat_zamestnancu (
     zamestnanec_id NUMBER NOT NULL,
-    mesic DATE NOT NULL,
+    mesic INT NOT NULL,
+    rok INT NOT NULL,
     plat DECIMAL(10,2) NOT NULL,
     FOREIGN KEY (zamestnanec_id) REFERENCES zamestnanci(id),
     PRIMARY KEY (zamestnanec_id, mesic)
@@ -176,6 +177,18 @@ AS
         p_pozice_id IN zamestnanci.pozice_id%TYPE
     );
     
+    PROCEDURE insert_denni_trzby(
+        p_datum IN denni_trzby.datum%TYPE,
+        p_celkova_trzba IN denni_trzby.celkova_trzba%TYPE
+    );
+
+    PROCEDURE insert_plat_zamestnancu(
+        p_zamestnanec_id IN plat_zamestnancu.zamestnanec_id%TYPE,
+        p_mesic IN plat_zamestnancu.mesic%TYPE,
+        p_rok IN plat_zamestnancu.rok%TYPE,
+        p_plat IN plat_zamestnancu.plat%TYPE
+    );
+
     PROCEDURE insert_dodavatel(
         p_nazev IN dodavatel.nazev%TYPE,
         p_kontakt IN dodavatel.kontakt%TYPE
@@ -214,7 +227,7 @@ AS
         VALUES (p_nazev);
     END insert_pozice;
 
-      PROCEDURE insert_zamestnanci(
+    PROCEDURE insert_zamestnanci(
         p_jmeno IN zamestnanci.jmeno%TYPE,
         p_pozice_id IN zamestnanci.pozice_id%TYPE
     )
@@ -224,6 +237,28 @@ AS
         VALUES (p_jmeno, p_pozice_id);
     END insert_zamestnanci;
     
+    PROCEDURE insert_denni_trzby(
+        p_datum IN denni_trzby.datum%TYPE,
+        p_celkova_trzba IN denni_trzby.celkova_trzba%TYPE
+    )
+    IS
+    BEGIN
+        INSERT INTO denni_trzby (datum, celkova_trzba)
+        VALUES (p_datum, p_celkova_trzba);
+    END insert_denni_trzby;
+
+    PROCEDURE insert_plat_zamestnancu(
+        p_zamestnanec_id IN plat_zamestnancu.zamestnanec_id%TYPE,
+        p_mesic IN plat_zamestnancu.mesic%TYPE,
+        p_rok IN plat_zamestnancu.rok%TYPE,
+        p_plat IN plat_zamestnancu.plat%TYPE
+    )
+    IS
+    BEGIN
+        INSERT INTO plat_zamestnancu (zamestnanec_id, mesic, rok, plat)
+        VALUES (p_zamestnanec_id, p_mesic, p_rok, p_plat);
+    END insert_plat_zamestnancu;
+
     PROCEDURE insert_dodavatel(
         p_nazev IN dodavatel.nazev%TYPE,
         p_kontakt IN dodavatel.kontakt%TYPE
