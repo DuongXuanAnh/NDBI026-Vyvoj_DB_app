@@ -1,3 +1,8 @@
+-- drop all views
+drop view Denni_trzba;
+drop view Objednavka_detail;
+drop view Plat_zamestnancu_detail;
+drop view Stoly_objednavky;
 
 -- drop all packages
 drop package insert_package;
