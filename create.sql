@@ -193,6 +193,11 @@ AS
         p_nazev IN dodavatel.nazev%TYPE,
         p_kontakt IN dodavatel.kontakt%TYPE
     );
+
+    PROCEDURE insert_objednavka(
+        p_stul_id IN objednavka.stul_id%TYPE,
+        p_jidlo_id IN objednavka_jidel.jidlo_id%TYPE
+    );
 END insert_package;
 /
 
@@ -269,6 +274,23 @@ AS
         VALUES (p_nazev, p_kontakt);
     END insert_dodavatel;
 
+
+    PROCEDURE insert_objednavka(
+        p_stul_id IN objednavka.stul_id%TYPE,
+        p_jidlo_id IN objednavka_jidel.jidlo_id%TYPE
+    )
+    IS
+        v_objednavka_id objednavka.id%TYPE;
+    BEGIN
+        -- vložit novou objednávku do tabulky objednavka
+        INSERT INTO objednavka (stul_id, datum_cas)
+        VALUES (p_stul_id, SYSTIMESTAMP)
+        RETURNING id INTO v_objednavka_id;
+
+        -- vložit záznam do tabulky objednavka_jidel
+        INSERT INTO objednavka_jidel (objednavka_id, jidlo_id)
+        VALUES (v_objednavka_id, p_jidlo_id);
+    END insert_objednavka;
+
 END insert_package;
 /
-

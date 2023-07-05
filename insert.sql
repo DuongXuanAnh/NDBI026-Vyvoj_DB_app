@@ -52,10 +52,29 @@ EXECUTE insert_package.insert_plat_zamestnancu(4, 2, 2023, 40000);
 EXECUTE insert_package.insert_plat_zamestnancu(5, 2, 2023, 45000);
 EXECUTE insert_package.insert_plat_zamestnancu(6, 2, 2023, 45000);
 
+-- Objednavky (id_stolu, id_jidla)
+EXECUTE insert_package.insert_objednavka(1, 9);
+EXECUTE insert_package.insert_objednavka(1, 1);
+EXECUTE insert_package.insert_objednavka(1, 2);
+EXECUTE insert_package.insert_objednavka(2, 4);
+EXECUTE insert_package.insert_objednavka(2, 6);
+EXECUTE insert_package.insert_objednavka(3, 7);
+EXECUTE insert_package.insert_objednavka(3, 4);
+EXECUTE insert_package.insert_objednavka(3, 5);
+EXECUTE insert_package.insert_objednavka(3, 7);
+EXECUTE insert_package.insert_objednavka(4, 3);
+EXECUTE insert_package.insert_objednavka(5, 8);
+EXECUTE insert_package.insert_objednavka(5, 10);
+EXECUTE insert_package.insert_objednavka(5, 2);
+EXECUTE insert_package.insert_objednavka(5, 4);
+EXECUTE insert_package.insert_objednavka(5, 6);
+EXECUTE insert_package.insert_objednavka(5, 2);
+EXECUTE insert_package.insert_objednavka(5, 1);
 
-DELETE FROM JIDELNI_LISTEK;
 SELECT * FROM JIDELNI_LISTEK;
 SELECT * FROM DODAVATEL;
 SELECT * FROM stoly;
 SELECT * FROM pozice;
 SELECT * FROM zamestnanci;
+SELECT * FROM objednavka;
+SELECT * FROM objednavka_jidel;
