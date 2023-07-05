@@ -1,3 +1,31 @@
+-- Tento návrh vytváří databázi pro řízení restaurace. Každá tabulka a operace v návrhu je zaměřena na různé aspekty restauračního podniku.
+
+-- Zde je stručný popis každé tabulky:
+
+-- jidelni_listek: Tato tabulka uchovává seznam jídel, které jsou k dispozici v restauraci. Každé jídlo má svůj jedinečný identifikátor id, nazev, popis a cena.
+
+-- stoly: Tato tabulka obsahuje informace o stolech dostupných v restauraci. Každý stůl má svůj jedinečný identifikátor id, pocet_mist a umisteni (kde se stůl nachází).
+
+-- objednavka: Tato tabulka zaznamenává objednávky vytvořené v restauraci. Každá objednávka má svůj jedinečný identifikátor id, čas a datum vytvoření datum_cas a stul_id, který odkazuje na stůl, kde byla objednávka vytvořena.
+
+-- objednavka_jidel: Tato tabulka spojuje objednávky a jídla. Má objednavka_id, který odkazuje na objednávku, a jidlo_id, který odkazuje na jídlo v objednávce.
+
+-- pozice: Tato tabulka definuje různé role nebo pozice, které mohou zaměstnanci v restauraci zastávat. Každá pozice má svůj jedinečný identifikátor id a nazev.
+
+-- zamestnanci: Tato tabulka uchovává informace o zaměstnancích restaurace. Každý zaměstnanec má svůj jedinečný identifikátor id, jmeno a pozice_id, který odkazuje na jeho pozici v tabulce pozice.
+
+-- denni_trzby: Tato tabulka sleduje celkové denní tržby restaurace. Každý záznam má datum datum a celkové tržby celkova_trzba za ten den.
+
+-- plat_zamestnancu: Tato tabulka sleduje platy zaměstnanců za každý měsíc. Má zamestnanec_id, který odkazuje na zaměstnance, mesic a rok, kdy byl plat vydán, a samotný plat.
+
+-- dodavatel: Tato tabulka uchovává informace o dodavatelích, kteří dodávají zboží do restaurace. Každý dodavatelmá svůj jedinečný identifikátor id, nazev a kontakt.
+
+-- Následně návrh zahrnuje několik sekvencí a triggerů. Sekvence jsou použity k automatickému generování jedinečných identifikátorů id pro nové záznamy v různých tabulkách. Triggery jsou použity k automatickému naplnění id před vložením nového záznamu.
+
+-- Nakonec je vytvořen balíček insert_package, který obsahuje procedury pro vkládání nových záznamů do různých tabulek. Tyto procedury jsou použity k vkládání dat do tabulek pomocí parametrů, což zvyšuje bezpečnost a účinnost vkládání dat. Každá procedura přijímá specifické parametry potřebné pro přidání nového záznamu do příslušné tabulky.
+
+-- Celkově tento návrh databáze pokrývá všechny hlavní aspekty řízení restaurace, včetně správy jídelního lístku, sledování objednávek, správy stolů, sledování tržeb, správy zaměstnanců, platů a dodavatelů.
+
 -- Tabulka jidelni_listek
 CREATE TABLE jidelni_listek (
     id NUMBER PRIMARY KEY,
