@@ -9,6 +9,13 @@ CREATE TABLE jidelni_listek (
 CREATE INDEX idx_jidelni_listek_nazev
 ON jidelni_listek (nazev);
 
+-- Tabulka stolu
+CREATE TABLE stoly (
+    id NUMBER PRIMARY KEY,
+    pocet_mist NUMBER NOT NULL,
+    umisteni VARCHAR2(100) NOT NULL
+);
+
 -- Tabulka objednavka
 CREATE TABLE objednavka (
     id NUMBER PRIMARY KEY,
@@ -27,13 +34,6 @@ CREATE TABLE objednavka_jidel (
     FOREIGN KEY (objednavka_id) REFERENCES objednavka(id),
     FOREIGN KEY (jidlo_id) REFERENCES jidelni_listek(id),
     PRIMARY KEY (objednavka_id, jidlo_id)
-);
-
--- Tabulka stolu
-CREATE TABLE stoly (
-    id NUMBER PRIMARY KEY,
-    pocet_mist NUMBER NOT NULL,
-    umisteni VARCHAR2(100) NOT NULL
 );
 
 -- Tabulka pozice
