@@ -37,18 +37,31 @@ CREATE TABLE objednavka_jidel (
     objednavka_id NUMBER NOT NULL,
     jidlo_id NUMBER NOT NULL,
     pocet NUMBER NOT NULL CHECK (pocet > 0),
-    FOREIGN KEY (objednavka_id) REFERENCES objednavka(id),
+    FOREIGN KEY (objednavka_id) REFERENCES objednavka(id) ON DELETE CASCADE,
     FOREIGN KEY (jidlo_id) REFERENCES jidelni_listek(id),
     PRIMARY KEY (objednavka_id, jidlo_id)
 );
 
 CREATE INDEX idx_objednavka_jidel_jidlo_id ON objednavka_jidel(jidlo_id);
+CREATE INDEX idx_objednavka_jidel_objednavka_id ON objednavka_jidel(objednavka_id);
+
+
+-- Tabulka oddeleni
+CREATE TABLE oddeleni (
+    id NUMBER PRIMARY KEY,
+    nazev VARCHAR2(100) NOT NULL UNIQUE
+);
 
 -- Tabulka pozice
 CREATE TABLE pozice (
     id NUMBER PRIMARY KEY,
-    nazev VARCHAR2(100) NOT NULL
+    nazev VARCHAR2(50) NOT NULL,
+    oddeleni_id NUMBER NOT NULL,
+    FOREIGN KEY (oddeleni_id) REFERENCES oddeleni(id),
+    UNIQUE (nazev, oddeleni_id)
 );
+
+CREATE INDEX idx_pozice_oddeleni_id ON pozice(oddeleni_id);
 
 -- Tabulka zamestnancu
 CREATE TABLE zamestnanci (
@@ -70,12 +83,14 @@ CREATE TABLE denni_trzby (
 -- Tabulka plat_zamestnancu
 CREATE TABLE plat_zamestnancu (
     zamestnanec_id NUMBER NOT NULL,
-    mesic INT NOT NULL,
-    rok INT NOT NULL,
-    plat DECIMAL(10,2) NOT NULL,
-    FOREIGN KEY (zamestnanec_id) REFERENCES zamestnanci(id),
-    PRIMARY KEY (zamestnanec_id, mesic)
+    rok NUMBER NOT NULL,
+    mesic NUMBER NOT NULL CHECK (mesic BETWEEN 1 AND 12),
+    plat DECIMAL(8, 2) CHECK (plat >= 0),
+    PRIMARY KEY (zamestnanec_id, rok, mesic),
+    FOREIGN KEY (zamestnanec_id) REFERENCES zamestnanci(id)
 );
+
+CREATE INDEX idx_plat_zamestnancu_zamestnanec_id ON plat_zamestnancu(zamestnanec_id);
 
 -- Tabulka dodavatelu
 CREATE TABLE dodavatel (
