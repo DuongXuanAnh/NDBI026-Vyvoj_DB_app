@@ -1,6 +1,9 @@
+-- Autogenerate ID using sequence
+CREATE SEQUENCE global_id_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
+
 -- Tabulka jidelni_listek
 CREATE TABLE jidelni_listek (
-    id NUMBER PRIMARY KEY,
+    id NUMBER DEFAULT global_id_seq.NEXTVAL PRIMARY KEY,
     nazev VARCHAR2(100) NOT NULL,
     popis VARCHAR2(500),
     cena DECIMAL(8,2) NOT NULL CHECK (cena >= 0),
@@ -12,7 +15,7 @@ ON jidelni_listek (nazev);
 
 -- Tabulka stolu
 CREATE TABLE stoly (
-    id NUMBER PRIMARY KEY,
+    id NUMBER DEFAULT global_id_seq.NEXTVAL PRIMARY KEY,
     identifikator VARCHAR2(50) NOT NULL UNIQUE,
     pocet_mist NUMBER NOT NULL,
     umisteni VARCHAR2(100) NOT NULL
@@ -20,7 +23,7 @@ CREATE TABLE stoly (
 
 -- Tabulka objednavka
 CREATE TABLE objednavka (
-    id NUMBER PRIMARY KEY,
+    id NUMBER DEFAULT global_id_seq.NEXTVAL PRIMARY KEY,
     datum_cas TIMESTAMP NOT NULL,
     stul_id NUMBER NOT NULL,
     FOREIGN KEY (stul_id) REFERENCES stoly(id)
@@ -48,13 +51,13 @@ CREATE INDEX idx_objednavka_jidel_objednavka_id ON objednavka_jidel(objednavka_i
 
 -- Tabulka oddeleni
 CREATE TABLE oddeleni (
-    id NUMBER PRIMARY KEY,
+    id NUMBER DEFAULT global_id_seq.NEXTVAL PRIMARY KEY,
     nazev VARCHAR2(100) NOT NULL UNIQUE
 );
 
 -- Tabulka pozice
 CREATE TABLE pozice (
-    id NUMBER PRIMARY KEY,
+    id NUMBER DEFAULT global_id_seq.NEXTVAL PRIMARY KEY,
     nazev VARCHAR2(50) NOT NULL,
     oddeleni_id NUMBER NOT NULL,
     FOREIGN KEY (oddeleni_id) REFERENCES oddeleni(id),
@@ -65,7 +68,7 @@ CREATE INDEX idx_pozice_oddeleni_id ON pozice(oddeleni_id);
 
 -- Tabulka zamestnancu
 CREATE TABLE zamestnanci (
-    id NUMBER PRIMARY KEY,
+    id NUMBER DEFAULT global_id_seq.NEXTVAL PRIMARY KEY,
     jmeno VARCHAR2(100) NOT NULL,
     pozice_id NUMBER NOT NULL,
     FOREIGN KEY (pozice_id) REFERENCES pozice(id)
@@ -94,87 +97,13 @@ CREATE INDEX idx_plat_zamestnancu_zamestnanec_id ON plat_zamestnancu(zamestnanec
 
 -- Tabulka dodavatelu
 CREATE TABLE dodavatel (
-    id NUMBER PRIMARY KEY,
+    id NUMBER DEFAULT global_id_seq.NEXTVAL PRIMARY KEY,
     nazev VARCHAR2(100) NOT NULL,
     kontakt VARCHAR2(200)
 );
 
 CREATE INDEX idx_dodavatel_nazev
 ON dodavatel (nazev);
-
-
-----------------------------------------------------------------------
--- Autogenerate ID pomoci sekvence a triggery
-CREATE SEQUENCE jidelni_listek_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
-CREATE SEQUENCE objednavka_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
-CREATE SEQUENCE dodavatel_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
-CREATE SEQUENCE stoly_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
-CREATE SEQUENCE pozice_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
-CREATE SEQUENCE zamestnanci_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
-
--- reset id 
---DROP SEQUENCE pozice_seq;
---CREATE SEQUENCE pozice_seq START WITH 1 INCREMENT BY 1;
-
-CREATE OR REPLACE TRIGGER jidelni_listek_trigger
-BEFORE INSERT ON jidelni_listek
-FOR EACH ROW
-BEGIN
-  SELECT jidelni_listek_seq.NEXTVAL
-  INTO :new.id
-  FROM dual;
-END;
-
-/
-CREATE OR REPLACE TRIGGER objednavka_trigger
-BEFORE INSERT ON objednavka
-FOR EACH ROW
-BEGIN
-  SELECT objednavka_seq.NEXTVAL
-  INTO :new.id
-  FROM dual;
-END;
-/
-
-CREATE OR REPLACE TRIGGER stoly_trigger
-BEFORE INSERT ON stoly
-FOR EACH ROW
-BEGIN
-  SELECT stoly_seq.NEXTVAL
-  INTO :new.id
-  FROM dual;
-END;
-/
-
-CREATE OR REPLACE TRIGGER pozice_trigger
-BEFORE INSERT ON pozice
-FOR EACH ROW
-BEGIN
-  SELECT pozice_seq.NEXTVAL
-  INTO :new.id
-  FROM dual;
-END;
-/
-
-CREATE OR REPLACE TRIGGER zamestnanci_trigger
-BEFORE INSERT ON zamestnanci
-FOR EACH ROW
-BEGIN
-  SELECT zamestnanci_seq.NEXTVAL
-  INTO :new.id
-  FROM dual;
-END;
-/
-
-CREATE OR REPLACE TRIGGER dodavatel_trigger
-BEFORE INSERT ON dodavatel
-FOR EACH ROW
-BEGIN
-  SELECT dodavatel_seq.NEXTVAL
-  INTO :new.id
-  FROM dual;
-END;
-/
 
 ---------------------------------------------------------------------
 

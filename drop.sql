@@ -25,9 +25,14 @@ drop trigger dodavatel_trigger;
 
 -- drop all indexes
 drop index idx_jidelni_listek_nazev;
+drop index idx_objednavka_stul;
 drop index idx_objednavka_datum;
+drop index idx_objednavka_jidel_jidlo_id;
+drop index idx_objednavka_jidel_objednavka_id;
+drop index idx_pozice_oddeleni_id;
 drop index idx_zamestnanci_pozice;
-drop index idx_dodavatel_nazev
+drop index idx_plat_zamestnancu_zamestnanec_id;
+drop index idx_dodavatel_nazev;
 
 -- drop all tables
 DROP TABLE objednavka_jidel;
@@ -35,6 +40,7 @@ DROP TABLE plat_zamestnancu;
 DROP TABLE objednavka;
 DROP TABLE jidelni_listek;
 DROP TABLE stoly;
+DROP TABLE oddeleni;
 DROP TABLE zamestnanci;
 DROP TABLE pozice;
 DROP TABLE dodavatel;
