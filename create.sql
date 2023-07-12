@@ -26,6 +26,7 @@ CREATE TABLE objednavka (
     id NUMBER DEFAULT global_id_seq.NEXTVAL PRIMARY KEY,
     datum_cas TIMESTAMP NOT NULL,
     stul_id NUMBER NOT NULL,
+    stav VARCHAR2(20),  -- 'nový', 'zpracovává se', 'hotový', 'zaplaceno'
     FOREIGN KEY (stul_id) REFERENCES stoly(id)
 );
 
@@ -119,11 +120,13 @@ CREATE OR REPLACE PACKAGE insert_package AS
         p_identifikator IN stoly.identifikator%TYPE,
         p_pocet_mist IN stoly.pocet_mist%TYPE,
         p_umisteni IN stoly.umisteni%TYPE
+        
     );
 
     PROCEDURE insert_objednavka(
         p_datum_cas IN objednavka.datum_cas%TYPE,
-        p_stul_id IN objednavka.stul_id%TYPE
+        p_stul_id IN objednavka.stul_id%TYPE,
+        p_stav IN objednavka.stav%TYPE
     );
 
     PROCEDURE insert_objednavka_jidel(
@@ -271,12 +274,13 @@ AS
 
     PROCEDURE insert_objednavka(
         p_datum_cas IN objednavka.datum_cas%TYPE,
-        p_stul_id IN objednavka.stul_id%TYPE
+        p_stul_id IN objednavka.stul_id%TYPE,
+        p_stav IN objednavka.stav%TYPE
     )
     IS
     BEGIN
-        INSERT INTO objednavka (stul_id, datum_cas)
-        VALUES (p_stul_id, p_datum_cas);
+        INSERT INTO objednavka (stul_id, datum_cas, stav)
+        VALUES (p_stul_id, p_datum_cas, p_stav);
     EXCEPTION
         WHEN DUP_VAL_ON_INDEX THEN
             raise_application_error(-20007, 'Duplikátní hodnota pro objednávku ' || TO_CHAR(p_datum_cas, 'DD.MM.YYYY HH24:MI:SS') || ', stůl ID: ' || p_stul_id);
