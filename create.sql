@@ -107,8 +107,8 @@ ON dodavatel (nazev);
 
 ---------------------------------------------------------------------
 
-CREATE OR REPLACE package insert_package
-AS
+CREATE OR REPLACE PACKAGE insert_package AS
+
     PROCEDURE insert_jidelni_listek(
         p_nazev IN jidelni_listek.nazev%TYPE,
         p_popis IN jidelni_listek.popis%TYPE,
@@ -116,19 +116,36 @@ AS
     );
 
     PROCEDURE insert_stoly(
+        p_identifikator IN stoly.identifikator%TYPE,
         p_pocet_mist IN stoly.pocet_mist%TYPE,
         p_umisteni IN stoly.umisteni%TYPE
     );
 
+    PROCEDURE insert_objednavka(
+        p_datum_cas IN objednavka.datum_cas%TYPE,
+        p_stul_id IN objednavka.stul_id%TYPE
+    );
+
+    PROCEDURE insert_objednavka_jidel(
+        p_objednavka_id IN objednavka_jidel.objednavka_id%TYPE,
+        p_jidlo_id IN objednavka_jidel.jidlo_id%TYPE,
+        p_pocet IN objednavka_jidel.pocet%TYPE
+    );
+
+    PROCEDURE insert_oddeleni(
+        p_nazev IN oddeleni.nazev%TYPE
+    );
+
     PROCEDURE insert_pozice(
-        p_nazev IN pozice.nazev%TYPE
+        p_nazev IN pozice.nazev%TYPE,
+        p_oddeleni_id IN pozice.oddeleni_id%TYPE
     );
 
     PROCEDURE insert_zamestnanci(
         p_jmeno IN zamestnanci.jmeno%TYPE,
         p_pozice_id IN zamestnanci.pozice_id%TYPE
     );
-    
+
     PROCEDURE insert_denni_trzby(
         p_datum IN denni_trzby.datum%TYPE,
         p_celkova_trzba IN denni_trzby.celkova_trzba%TYPE
@@ -136,8 +153,8 @@ AS
 
     PROCEDURE insert_plat_zamestnancu(
         p_zamestnanec_id IN plat_zamestnancu.zamestnanec_id%TYPE,
-        p_mesic IN plat_zamestnancu.mesic%TYPE,
         p_rok IN plat_zamestnancu.rok%TYPE,
+        p_mesic IN plat_zamestnancu.mesic%TYPE,
         p_plat IN plat_zamestnancu.plat%TYPE
     );
 
@@ -146,10 +163,6 @@ AS
         p_kontakt IN dodavatel.kontakt%TYPE
     );
 
-    PROCEDURE insert_objednavka(
-        p_stul_id IN objednavka.stul_id%TYPE,
-        p_jidlo_id IN objednavka_jidel.jidlo_id%TYPE
-    );
 END insert_package;
 /
 
@@ -164,24 +177,47 @@ AS
     BEGIN
         INSERT INTO jidelni_listek (nazev, popis, cena)
         VALUES (p_nazev, p_popis, p_cena);
+    EXCEPTION
+        WHEN DUP_VAL_ON_INDEX THEN
+            raise_application_error(-20001, 'Duplikátní hodnota pro jídelní lístek ' || p_nazev);
     END insert_jidelni_listek;
 
     PROCEDURE insert_stoly(
+        p_identifikator IN stoly.identifikator%TYPE,
         p_pocet_mist IN stoly.pocet_mist%TYPE,
         p_umisteni IN stoly.umisteni%TYPE
     ) IS
     BEGIN
-        INSERT INTO stoly (pocet_mist, umisteni)
-        VALUES (p_pocet_mist, p_umisteni);
+        INSERT INTO stoly (identifikator, pocet_mist, umisteni)
+        VALUES (p_identifikator, p_pocet_mist, p_umisteni);
+    EXCEPTION
+        WHEN DUP_VAL_ON_INDEX THEN
+            raise_application_error(-20002, 'Duplikátní hodnota pro stůl ' || p_identifikator);
     END insert_stoly;
 
-    PROCEDURE insert_pozice(
-        p_nazev IN pozice.nazev%TYPE
+    PROCEDURE insert_oddeleni(
+        p_nazev IN oddeleni.nazev%TYPE
     )
     IS
     BEGIN
-        INSERT INTO pozice (nazev)
+        INSERT INTO oddeleni (nazev)
         VALUES (p_nazev);
+    EXCEPTION
+        WHEN DUP_VAL_ON_INDEX THEN
+            raise_application_error(-20003, 'Duplikátní hodnota pro oddělení ' || p_nazev);
+    END insert_oddeleni;
+
+    PROCEDURE insert_pozice(
+        p_nazev IN pozice.nazev%TYPE,
+        p_oddeleni_id IN pozice.oddeleni_id%TYPE
+    )
+    IS
+    BEGIN
+        INSERT INTO pozice (nazev, oddeleni_id)
+        VALUES (p_nazev, p_oddeleni_id);
+    EXCEPTION
+        WHEN DUP_VAL_ON_INDEX THEN
+            raise_application_error(-20004, 'Duplikátní hodnota pro pozici ' || p_nazev);
     END insert_pozice;
 
     PROCEDURE insert_zamestnanci(
@@ -192,7 +228,11 @@ AS
     BEGIN
         INSERT INTO zamestnanci (jmeno, pozice_id)
         VALUES (p_jmeno, p_pozice_id);
+    EXCEPTION
+        WHEN DUP_VAL_ON_INDEX THEN
+            raise_application_error(-20005, 'Duplikátní hodnota pro zaměstnance ' || p_jmeno);
     END insert_zamestnanci;
+
     
     PROCEDURE insert_denni_trzby(
         p_datum IN denni_trzby.datum%TYPE,
@@ -204,16 +244,16 @@ AS
         VALUES (p_datum, p_celkova_trzba);
     END insert_denni_trzby;
 
-    PROCEDURE insert_plat_zamestnancu(
+       PROCEDURE insert_plat_zamestnancu(
         p_zamestnanec_id IN plat_zamestnancu.zamestnanec_id%TYPE,
-        p_mesic IN plat_zamestnancu.mesic%TYPE,
         p_rok IN plat_zamestnancu.rok%TYPE,
+        p_mesic IN plat_zamestnancu.mesic%TYPE,
         p_plat IN plat_zamestnancu.plat%TYPE
     )
     IS
     BEGIN
-        INSERT INTO plat_zamestnancu (zamestnanec_id, mesic, rok, plat)
-        VALUES (p_zamestnanec_id, p_mesic, p_rok, p_plat);
+        INSERT INTO plat_zamestnancu (zamestnanec_id, rok, mesic, plat)
+        VALUES (p_zamestnanec_id, p_rok, p_mesic, p_plat);
     END insert_plat_zamestnancu;
 
     PROCEDURE insert_dodavatel(
@@ -224,25 +264,36 @@ AS
     BEGIN
         INSERT INTO dodavatel (nazev, kontakt)
         VALUES (p_nazev, p_kontakt);
+    EXCEPTION
+        WHEN DUP_VAL_ON_INDEX THEN
+            raise_application_error(-20006, 'Duplikátní hodnota pro dodavatele ' || p_nazev);
     END insert_dodavatel;
 
-
     PROCEDURE insert_objednavka(
-        p_stul_id IN objednavka.stul_id%TYPE,
-        p_jidlo_id IN objednavka_jidel.jidlo_id%TYPE
+        p_datum_cas IN objednavka.datum_cas%TYPE,
+        p_stul_id IN objednavka.stul_id%TYPE
     )
     IS
-        v_objednavka_id objednavka.id%TYPE;
     BEGIN
-        -- vložit novou objednávku do tabulky objednavka
         INSERT INTO objednavka (stul_id, datum_cas)
-        VALUES (p_stul_id, SYSTIMESTAMP)
-        RETURNING id INTO v_objednavka_id;
-
-        -- vložit záznam do tabulky objednavka_jidel
-        INSERT INTO objednavka_jidel (objednavka_id, jidlo_id)
-        VALUES (v_objednavka_id, p_jidlo_id);
+        VALUES (p_stul_id, p_datum_cas);
+    EXCEPTION
+        WHEN DUP_VAL_ON_INDEX THEN
+            raise_application_error(-20007, 'Duplikátní hodnota pro objednávku ' || TO_CHAR(p_datum_cas, 'DD.MM.YYYY HH24:MI:SS') || ', stůl ID: ' || p_stul_id);
     END insert_objednavka;
+
+    PROCEDURE INSERT_OBJEDNAVKA_JIDEL(
+        p_objednavka_id IN objednavka_jidel.objednavka_id%TYPE,
+        p_jidlo_id IN objednavka_jidel.jidlo_id%TYPE,
+        p_pocet IN objednavka_jidel.pocet%TYPE
+    )
+    IS
+    BEGIN
+        INSERT INTO objednavka_jidel (objednavka_id, jidlo_id, pocet)
+        VALUES (p_objednavka_id, p_jidlo_id, p_pocet);
+    END INSERT_OBJEDNAVKA_JIDEL;
+
+ 
 
 END insert_package;
 /
