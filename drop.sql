@@ -6,6 +6,7 @@ drop view Stoly_objednavky;
 
 -- drop all packages
 drop package insert_package;
+drop package conversion_package
 
 -- drop all sequences
 drop sequence jidelni_listek_seq;
