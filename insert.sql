@@ -18,11 +18,12 @@ EXECUTE insert_package.insert_dodavatel('Dodavatel 4', 'Kontaktní info 4');
 EXECUTE insert_package.insert_dodavatel('Dodavatel 5', 'Kontaktní info 5');
 
 -- Stoly
-EXECUTE insert_package.insert_stoly('Stůl 1', 4, 'V rohu restaurace');
-EXECUTE insert_package.insert_stoly('Stůl 2', 2, 'U okna');
-EXECUTE insert_package.insert_stoly('Stůl 3', 6, 'Vedle baru');
-EXECUTE insert_package.insert_stoly('Stůl 4', 4, 'V předsíni');
-EXECUTE insert_package.insert_stoly('Stůl 5', 10, 'Na terase');
+EXECUTE insert_package.insert_stoly(p_id => 1, p_identifikator => 'Stůl 1', p_pocet_mist => 4, p_umisteni => 'V rohu restaurace');
+EXECUTE insert_package.insert_stoly(p_id => 2, p_identifikator => 'Stůl 2', p_pocet_mist => 2, p_umisteni => 'U okna');
+EXECUTE insert_package.insert_stoly(p_id => 3,p_identifikator => 'Stůl 3', p_pocet_mist => 6, p_umisteni => 'Vedle baru');
+EXECUTE insert_package.insert_stoly(p_id => 4, p_identifikator => 'Stůl 4', p_pocet_mist => 4, p_umisteni => 'V předsíni');
+EXECUTE insert_package.insert_stoly(p_id => 5, p_identifikator => 'Stůl 5', p_pocet_mist => 10, p_umisteni => 'Na terase');
+
 
 -- Oddeleni
 EXECUTE insert_package.insert_oddeleni('Kuchyně');
@@ -60,12 +61,18 @@ EXECUTE insert_package.insert_plat_zamestnancu(5, 2023, 2, 50000);
 EXECUTE insert_package.insert_plat_zamestnancu(6, 2023, 2, 60000);
 
 -- Objednavky
-EXECUTE insert_package.insert_objednavka(SYSDATE, 1, 'nový');
-EXECUTE insert_package.insert_objednavka(SYSDATE, 2, 'zpracovává se');
-EXECUTE insert_package.insert_objednavka(SYSDATE, 3, 'hotový');
-EXECUTE insert_package.insert_objednavka(SYSDATE, 4, 'zpracovává se');
-EXECUTE insert_package.insert_objednavka(SYSDATE, 5, 'zaplaceno');
+EXECUTE insert_package.insert_objednavka(p_datum_cas => SYSDATE, p_stul_id => 1, p_stav => 'nový');
+EXECUTE insert_package.insert_objednavka(p_datum_cas => SYSDATE, p_stul_id => 2, p_stav => 'zpracovává se');
+EXECUTE insert_package.insert_objednavka(p_datum_cas => SYSDATE, p_stul_id => 3, p_stav => 'hotový');
+EXECUTE insert_package.insert_objednavka(p_datum_cas => SYSDATE, p_stul_id => 4, p_stav => 'zpracovává se');
+EXECUTE insert_package.insert_objednavka(p_datum_cas => SYSDATE, p_stul_id => 5, p_stav => 'zaplaceno');
 
+-- Objednavka_jidel
+EXECUTE insert_package.insert_objednavka_jidel(p_objednavka_id => 1, p_jidlo_id => 1, p_pocet => 2);
+EXECUTE insert_package.insert_objednavka_jidel(p_objednavka_id => 2, p_jidlo_id => 3, p_pocet => 4);
+EXECUTE insert_package.insert_objednavka_jidel(p_objednavka_id => 3, p_jidlo_id => 2, p_pocet => 1);
+EXECUTE insert_package.insert_objednavka_jidel(p_objednavka_id => 4, p_jidlo_id => 4, p_pocet => 3);
+EXECUTE insert_package.insert_objednavka_jidel(p_objednavka_id => 5, p_jidlo_id => 5, p_pocet => 5);
 
 SELECT * FROM JIDELNI_LISTEK;
 SELECT * FROM DODAVATEL;
