@@ -77,12 +77,17 @@ CREATE INDEX idx_pozice_oddeleni_id ON pozice(oddeleni_id);
 CREATE TABLE zamestnanci (
     id NUMBER DEFAULT zamestnanci_id_seq.NEXTVAL PRIMARY KEY,
     jmeno VARCHAR2(100) NOT NULL,
+    prijmeni VARCHAR2(100) NOT NULL,
+    rodne_cislo VARCHAR2(11) NOT NULL UNIQUE,
     pozice_id NUMBER NOT NULL,
     FOREIGN KEY (pozice_id) REFERENCES pozice(id)
 );
 
 CREATE INDEX idx_zamestnanci_pozice
 ON zamestnanci (pozice_id);
+
+CREATE INDEX idx_zamestnanci_rodne_cislo 
+ON zamestnanci(rodne_cislo);
 
 -- Tabulka plat_zamestnancu
 CREATE TABLE plat_zamestnancu (
@@ -135,10 +140,36 @@ CREATE OR REPLACE PACKAGE insert_package AS
         p_pocet IN objednavka_jidel.pocet%TYPE
     );
 
-    -- PROCEDURE insert_oddeleni(
-    --     p_id IN oddeleni.id%TYPE DEFAULT NULL,
-    --     p_nazev IN oddeleni.nazev%TYPE
-    -- )
+    PROCEDURE insert_oddeleni(
+        p_id IN oddeleni.id%TYPE DEFAULT NULL,
+        p_nazev IN oddeleni.nazev%TYPE
+    );
+
+    PROCEDURE insert_pozice(
+        p_id IN pozice.id%TYPE DEFAULT NULL,
+        p_nazev IN pozice.nazev%TYPE,
+        p_oddeleni_id IN pozice.oddeleni_id%TYPE
+    );
+
+    PROCEDURE insert_zamestnanci(
+        p_id IN zamestnanci.id%TYPE DEFAULT NULL,
+        p_jmeno IN zamestnanci.jmeno%TYPE,
+        p_prijmeni IN zamestnanci.prijmeni%TYPE,
+        p_rodne_cislo IN zamestnanci.rodne_cislo%TYPE,
+        p_pozice_id IN zamestnanci.pozice_id%TYPE
+    );
+
+     PROCEDURE insert_plat_zamestnancu(
+        p_zamestnanec_id IN plat_zamestnancu.zamestnanec_id%TYPE,
+        p_rok IN plat_zamestnancu.rok%TYPE,
+        p_mesic IN plat_zamestnancu.mesic%TYPE,
+        p_plat IN plat_zamestnancu.plat%TYPE
+    );
+
+    PROCEDURE insert_dodavatel(
+        p_nazev IN dodavatel.nazev%TYPE,
+        p_kontakt IN dodavatel.kontakt%TYPE
+    );
 
 END insert_package;
 /
@@ -219,6 +250,90 @@ AS
             raise_application_error(-20004, 'Chyba při vkládání objednávky jídla: ' || SQLERRM);
     END insert_objednavka_jidel;
 
+
+    PROCEDURE insert_oddeleni(
+        p_id IN oddeleni.id%TYPE DEFAULT NULL,
+        p_nazev IN oddeleni.nazev%TYPE
+    )
+    IS
+    BEGIN
+        IF p_id IS NULL THEN
+            INSERT INTO oddeleni (nazev)
+            VALUES (p_nazev);
+        ELSE
+            INSERT INTO oddeleni (id, nazev)
+            VALUES (p_id, p_nazev);
+        END IF;
+    EXCEPTION
+        WHEN DUP_VAL_ON_INDEX THEN
+            raise_application_error(-20005, 'Duplikátní hodnota pro oddělení ' || p_nazev);
+    END insert_oddeleni;
+
+
+    PROCEDURE insert_pozice(
+        p_id IN pozice.id%TYPE DEFAULT NULL,
+        p_nazev IN pozice.nazev%TYPE,
+        p_oddeleni_id IN pozice.oddeleni_id%TYPE
+    )
+    IS
+    BEGIN
+        IF p_id IS NULL THEN
+            INSERT INTO pozice (nazev, oddeleni_id)
+            VALUES (p_nazev, p_oddeleni_id);
+        ELSE
+            INSERT INTO pozice (id, nazev, oddeleni_id)
+            VALUES (p_id, p_nazev, p_oddeleni_id);
+        END IF;
+    EXCEPTION
+        WHEN DUP_VAL_ON_INDEX THEN
+            raise_application_error(-20006, 'Duplikátní hodnota pro pozici ' || p_nazev);
+    END insert_pozice;
+
+
+    PROCEDURE insert_zamestnanci(
+        p_id IN zamestnanci.id%TYPE DEFAULT NULL,
+        p_jmeno IN zamestnanci.jmeno%TYPE,
+        p_prijmeni IN zamestnanci.prijmeni%TYPE,
+        p_rodne_cislo IN zamestnanci.rodne_cislo%TYPE,
+        p_pozice_id IN zamestnanci.pozice_id%TYPE
+    ) IS
+    BEGIN
+        IF p_id IS NULL THEN
+            INSERT INTO zamestnanci (jmeno, prijmeni, rodne_cislo, pozice_id)
+            VALUES (p_jmeno, p_prijmeni, p_rodne_cislo, p_pozice_id);
+        ELSE
+            INSERT INTO zamestnanci (id, jmeno, prijmeni, rodne_cislo, pozice_id)
+            VALUES (p_id, p_jmeno, p_prijmeni, p_rodne_cislo, p_pozice_id);
+        END IF;
+    EXCEPTION
+        WHEN DUP_VAL_ON_INDEX THEN
+            raise_application_error(-20007, 'Duplikátní hodnota pro zaměstnance s rodným číslem ' || p_rodne_cislo);
+    END insert_zamestnanci;
+
+    PROCEDURE insert_plat_zamestnancu(
+        p_zamestnanec_id IN plat_zamestnancu.zamestnanec_id%TYPE,
+        p_rok IN plat_zamestnancu.rok%TYPE,
+        p_mesic IN plat_zamestnancu.mesic%TYPE,
+        p_plat IN plat_zamestnancu.plat%TYPE
+    )
+    IS
+    BEGIN
+        INSERT INTO plat_zamestnancu (zamestnanec_id, rok, mesic, plat)
+        VALUES (p_zamestnanec_id, p_rok, p_mesic, p_plat);
+    EXCEPTION
+        WHEN OTHERS THEN
+            raise_application_error(-20008, 'Chyba při vkládání platů zaměstnanců: ' || SQLERRM);
+    END insert_plat_zamestnancu;
+
+    PROCEDURE insert_dodavatel(
+        p_nazev IN dodavatel.nazev%TYPE,
+        p_kontakt IN dodavatel.kontakt%TYPE
+    )
+    IS
+    BEGIN
+        INSERT INTO dodavatel (nazev, kontakt)
+        VALUES (p_nazev, p_kontakt);
+    END insert_dodavatel;
 
 END insert_package;
 /

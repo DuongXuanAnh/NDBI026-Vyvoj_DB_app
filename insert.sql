@@ -11,11 +11,10 @@ EXECUTE insert_package.insert_jidelni_listek(p_id => 9, p_nazev => 'Sushi', p_po
 EXECUTE insert_package.insert_jidelni_listek(p_id => 10, p_nazev => 'Tiramisu', p_popis => 'Tradiční italský dezert', p_cena => 120);
 -----------------------------------------------------------------------------
 --Dodavatel
-EXECUTE insert_package.insert_dodavatel('Dodavatel 1', 'Kontaktní info 1');
-EXECUTE insert_package.insert_dodavatel('Dodavatel 2', 'Kontaktní info 2');
-EXECUTE insert_package.insert_dodavatel('Dodavatel 3', 'Kontaktní info 3');
-EXECUTE insert_package.insert_dodavatel('Dodavatel 4', 'Kontaktní info 4');
-EXECUTE insert_package.insert_dodavatel('Dodavatel 5', 'Kontaktní info 5');
+EXECUTE insert_package.insert_dodavatel(p_nazev => 'Dodavatel 1', p_kontakt => 'Kontaktní info 1');
+EXECUTE insert_package.insert_dodavatel(p_nazev => 'Dodavatel 2', p_kontakt => 'Kontaktní info 2');
+EXECUTE insert_package.insert_dodavatel(p_nazev => 'Dodavatel 3', p_kontakt => 'Kontaktní info 3');
+EXECUTE insert_package.insert_dodavatel(p_nazev => 'Dodavatel 4', p_kontakt => 'Kontaktní info 4');
 
 -- Stoly
 EXECUTE insert_package.insert_stoly(p_id => 1, p_identifikator => 'Stůl 1', p_pocet_mist => 4, p_umisteni => 'V rohu restaurace');
@@ -26,39 +25,38 @@ EXECUTE insert_package.insert_stoly(p_id => 5, p_identifikator => 'Stůl 5', p_p
 
 
 -- Oddeleni
-EXECUTE insert_package.insert_oddeleni('Kuchyně');
-EXECUTE insert_package.insert_oddeleni('Číšnický tým');
-EXECUTE insert_package.insert_oddeleni('Bar');
-EXECUTE insert_package.insert_oddeleni('Management a administrativa');
+EXECUTE insert_package.insert_oddeleni(p_id => 1, p_nazev => 'Kuchyně');
+EXECUTE insert_package.insert_oddeleni(p_id => 2, p_nazev => 'Číšníci');
+EXECUTE insert_package.insert_oddeleni(p_id => 3, p_nazev => 'Management a administrativa');
+EXECUTE insert_package.insert_oddeleni(p_id => 4, p_nazev => 'Bar');
 
 -- Pozice
-EXECUTE insert_package.insert_pozice('Kuchař', 1);
-EXECUTE insert_package.insert_pozice('Číšník', 2);
-EXECUTE insert_package.insert_pozice('Barman', 3);
-EXECUTE insert_package.insert_pozice('Manažer', 4);
+EXECUTE insert_package.insert_pozice(p_nazev => 'Šéfkuchař', p_oddeleni_id => 1);
+EXECUTE insert_package.insert_pozice(p_nazev => 'Číšník', p_oddeleni_id => 2);
+EXECUTE insert_package.insert_pozice(p_nazev => 'Manažer', p_oddeleni_id => 3);
+EXECUTE insert_package.insert_pozice(p_nazev => 'Barman', p_oddeleni_id => 4);
 
 -- Zamestnanci
-EXECUTE insert_package.insert_zamestnanci('Jan Novák', 1);
-EXECUTE insert_package.insert_zamestnanci('Jana Svobodová', 2);
-EXECUTE insert_package.insert_zamestnanci('Petr Dvořák', 3);
-EXECUTE insert_package.insert_zamestnanci('Lucie Jelínková', 3);
-EXECUTE insert_package.insert_zamestnanci('Martin Černý', 4);
-EXECUTE insert_package.insert_zamestnanci('Eva Němcová', 4);
+EXECUTE insert_package.insert_zamestnanci(p_id => 1, p_jmeno => 'Jan', p_prijmeni => 'Novak', p_rodne_cislo => '12345678901', p_pozice_id => 1);
+EXECUTE insert_package.insert_zamestnanci(p_id => 2, p_jmeno => 'Martina', p_prijmeni => 'Kovarova', p_rodne_cislo => '23456789012', p_pozice_id => 2);
+EXECUTE insert_package.insert_zamestnanci(p_id => 3, p_jmeno => 'Petr', p_prijmeni => 'Dvořák', p_rodne_cislo => '98556789012', p_pozice_id => 2);
+EXECUTE insert_package.insert_zamestnanci(p_id => 4, p_jmeno => 'Petr', p_prijmeni => 'Kral', p_rodne_cislo => '34567890123', p_pozice_id => 3);
+EXECUTE insert_package.insert_zamestnanci(p_id => 5, p_jmeno => 'Martin', p_prijmeni => 'Černý', p_rodne_cislo => '46967890123', p_pozice_id => 4);
+
 
 -- Plat zamestancu
-EXECUTE insert_package.insert_plat_zamestnancu(1, 2023, 1, 100000);
-EXECUTE insert_package.insert_plat_zamestnancu(2, 2023, 1, 20000);
-EXECUTE insert_package.insert_plat_zamestnancu(3, 2023, 1, 30000);
-EXECUTE insert_package.insert_plat_zamestnancu(4, 2023, 1, 40000);
-EXECUTE insert_package.insert_plat_zamestnancu(5, 2023, 1, 50000);
-EXECUTE insert_package.insert_plat_zamestnancu(6, 2023, 1, 60000);
+EXECUTE insert_package.insert_plat_zamestnancu(p_zamestnanec_id => 1, p_rok => 2023, p_mesic => 8, p_plat => 150000);
+EXECUTE insert_package.insert_plat_zamestnancu(p_zamestnanec_id => 2, p_rok => 2023, p_mesic => 8, p_plat => 50000);
+EXECUTE insert_package.insert_plat_zamestnancu(p_zamestnanec_id => 3, p_rok => 2023, p_mesic => 8, p_plat => 50000);
+EXECUTE insert_package.insert_plat_zamestnancu(p_zamestnanec_id => 4, p_rok => 2023, p_mesic => 8, p_plat => 80000);
+EXECUTE insert_package.insert_plat_zamestnancu(p_zamestnanec_id => 5, p_rok => 2023, p_mesic => 8, p_plat => 40000);
 
-EXECUTE insert_package.insert_plat_zamestnancu(1, 2023, 2, 100000);
-EXECUTE insert_package.insert_plat_zamestnancu(2, 2023, 2, 20000);
-EXECUTE insert_package.insert_plat_zamestnancu(3, 2023, 2, 30000);
-EXECUTE insert_package.insert_plat_zamestnancu(4, 2023, 2, 40000);
-EXECUTE insert_package.insert_plat_zamestnancu(5, 2023, 2, 50000);
-EXECUTE insert_package.insert_plat_zamestnancu(6, 2023, 2, 60000);
+EXECUTE insert_package.insert_plat_zamestnancu(p_zamestnanec_id => 1, p_rok => 2023, p_mesic => 9, p_plat => 150000);
+EXECUTE insert_package.insert_plat_zamestnancu(p_zamestnanec_id => 2, p_rok => 2023, p_mesic => 9, p_plat => 50000);
+EXECUTE insert_package.insert_plat_zamestnancu(p_zamestnanec_id => 3, p_rok => 2023, p_mesic => 9, p_plat => 50000);
+EXECUTE insert_package.insert_plat_zamestnancu(p_zamestnanec_id => 4, p_rok => 2023, p_mesic => 9, p_plat => 80000);
+EXECUTE insert_package.insert_plat_zamestnancu(p_zamestnanec_id => 5, p_rok => 2023, p_mesic => 9, p_plat => 40000);
+
 
 -- Objednavky
 EXECUTE insert_package.insert_objednavka(p_datum_cas => SYSDATE, p_stul_id => 1, p_stav => 'nový');
