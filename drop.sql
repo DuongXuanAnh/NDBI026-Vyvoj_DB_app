@@ -19,12 +19,9 @@ drop sequence zamestnanci_id_seq;
 drop sequence dodavatel_id_seq;
 
 -- drop all triggers
-drop trigger jidelni_listek_trigger;
-drop trigger objednavka_trigger;
-drop trigger stoly_trigger;
-drop trigger pozice_trigger;
-drop trigger zamestnanci_trigger;
-drop trigger dodavatel_trigger;
+drop trigger check_stul_availability_trigger;
+drop trigger verify_order_status_trigger;
+drop trigger check_employee_salary_trigger;
 
 -- drop all indexes
 drop index idx_jidelni_listek_nazev;
