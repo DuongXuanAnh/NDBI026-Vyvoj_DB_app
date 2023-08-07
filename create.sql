@@ -334,3 +334,90 @@ AS
 
 END insert_package;
 /
+
+
+CREATE OR REPLACE package conversion_package
+AS
+    FUNCTION jidelni_listek_to_id(p_nazev IN jidelni_listek.nazev%TYPE) RETURN jidelni_listek.id%TYPE;
+    FUNCTION stoly_to_id(p_identifikator IN stoly.identifikator%TYPE) RETURN stoly.id%TYPE;
+    FUNCTION oddeleni_to_id(p_nazev IN oddeleni.nazev%TYPE) RETURN oddeleni.id%TYPE;
+    FUNCTION pozice_to_id(p_nazev IN pozice.nazev%TYPE) RETURN pozice.id%TYPE;
+    FUNCTION zamestnanci_to_id(p_jmeno IN zamestnanci.jmeno%TYPE) RETURN zamestnanci.id%TYPE;
+    FUNCTION dodavatel_to_id(p_nazev IN dodavatel.nazev%TYPE) RETURN dodavatel.id%TYPE;
+END conversion_package;
+/
+
+CREATE OR REPLACE PACKAGE BODY conversion_package
+AS
+    FUNCTION jidelni_listek_to_id(p_nazev IN jidelni_listek.nazev%TYPE) RETURN jidelni_listek.id%TYPE
+    IS
+        l_id jidelni_listek.id%TYPE;
+    BEGIN
+        SELECT id INTO l_id FROM jidelni_listek WHERE nazev = p_nazev;
+        RETURN l_id;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            raise_application_error(-20035, 'Nenalezen žádný jídelní lístek s názvem ' || p_nazev);
+        WHEN TOO_MANY_ROWS THEN
+            raise_application_error(-20036, 'Nalezeno více než jedno jídlo s názvem ' || p_nazev);
+    END jidelni_listek_to_id;
+
+
+    FUNCTION stoly_to_id(p_identifikator IN stoly.identifikator%TYPE) RETURN stoly.id%TYPE
+    IS
+        l_id stoly.id%TYPE;
+    BEGIN
+        SELECT id INTO l_id FROM stoly WHERE identifikator = p_identifikator;
+        RETURN l_id;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            raise_application_error(-20037, 'Nenalezen žádný stůl s identifikátorem ' || p_identifikator);
+    END stoly_to_id;
+
+     FUNCTION oddeleni_to_id(p_nazev IN oddeleni.nazev%TYPE) RETURN oddeleni.id%TYPE
+    IS
+        l_id oddeleni.id%TYPE;
+    BEGIN
+        SELECT id INTO l_id FROM oddeleni WHERE nazev = p_nazev;
+        RETURN l_id;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            raise_application_error(-20038, 'Nenalezeno žádné oddělení s názvem ' || p_nazev);
+    END oddeleni_to_id;
+
+    FUNCTION pozice_to_id(p_nazev IN pozice.nazev%TYPE) RETURN pozice.id%TYPE
+    IS
+        l_id pozice.id%TYPE;
+    BEGIN
+        SELECT id INTO l_id FROM pozice WHERE nazev = p_nazev;
+        RETURN l_id;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            raise_application_error(-20039, 'Nenalezena žádná pozice s názvem ' || p_nazev);
+    END pozice_to_id;
+
+    FUNCTION zamestnanci_to_id(p_jmeno IN zamestnanci.jmeno%TYPE) RETURN zamestnanci.id%TYPE
+    IS
+        l_id zamestnanci.id%TYPE;
+    BEGIN
+        SELECT id INTO l_id FROM zamestnanci WHERE jmeno = p_jmeno;
+        RETURN l_id;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            raise_application_error(-20040, 'Nenalezen žádný zaměstnanec s jménem ' || p_jmeno);
+    END zamestnanci_to_id;
+
+    FUNCTION dodavatel_to_id(p_nazev IN dodavatel.nazev%TYPE) RETURN dodavatel.id%TYPE
+    IS
+        l_id dodavatel.id%TYPE;
+    BEGIN
+        SELECT id INTO l_id FROM dodavatel WHERE nazev = p_nazev;
+        RETURN l_id;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            raise_application_error(-20041, 'Nenalezen žádný dodavatel s názvem ' || p_nazev);
+    END dodavatel_to_id;
+
+
+END conversion_package;
+/
