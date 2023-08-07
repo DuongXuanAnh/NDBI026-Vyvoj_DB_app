@@ -59,11 +59,11 @@ EXECUTE insert_package.insert_plat_zamestnancu(p_zamestnanec_id => 5, p_rok => 2
 
 
 -- Objednavky
-EXECUTE insert_package.insert_objednavka(p_datum_cas => SYSDATE, p_stul_id => 1, p_stav => 'nový');
-EXECUTE insert_package.insert_objednavka(p_datum_cas => SYSDATE, p_stul_id => 2, p_stav => 'zpracovává se');
-EXECUTE insert_package.insert_objednavka(p_datum_cas => SYSDATE, p_stul_id => 3, p_stav => 'hotový');
-EXECUTE insert_package.insert_objednavka(p_datum_cas => SYSDATE, p_stul_id => 4, p_stav => 'zpracovává se');
-EXECUTE insert_package.insert_objednavka(p_datum_cas => SYSDATE, p_stul_id => 5, p_stav => 'zaplaceno');
+EXECUTE insert_package.insert_objednavka(p_id => 1, p_datum_cas => SYSDATE, p_stul_id => 1, p_stav => 'nový');
+EXECUTE insert_package.insert_objednavka(p_id => 2, p_datum_cas => SYSDATE, p_stul_id => 2, p_stav => 'zpracovává se');
+EXECUTE insert_package.insert_objednavka(p_id => 3, p_datum_cas => SYSDATE, p_stul_id => 3, p_stav => 'hotový');
+EXECUTE insert_package.insert_objednavka(p_id => 4, p_datum_cas => SYSDATE, p_stul_id => 4, p_stav => 'zpracovává se');
+EXECUTE insert_package.insert_objednavka(p_id => 5, p_datum_cas => SYSDATE, p_stul_id => 5, p_stav => 'zaplaceno');
 
 -- Objednavka_jidel
 EXECUTE insert_package.insert_objednavka_jidel(p_objednavka_id => 1, p_jidlo_id => 1, p_pocet => 2);

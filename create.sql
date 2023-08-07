@@ -86,9 +86,6 @@ CREATE TABLE zamestnanci (
 CREATE INDEX idx_zamestnanci_pozice
 ON zamestnanci (pozice_id);
 
-CREATE INDEX idx_zamestnanci_rodne_cislo 
-ON zamestnanci(rodne_cislo);
-
 -- Tabulka plat_zamestnancu
 CREATE TABLE plat_zamestnancu (
     zamestnanec_id NUMBER NOT NULL,
