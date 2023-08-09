@@ -157,6 +157,7 @@ CREATE OR REPLACE PACKAGE insert_package AS
     );
 
     PROCEDURE insert_dodavatel(
+        p_id IN dodavatel.id%TYPE DEFAULT NULL,
         p_nazev IN dodavatel.nazev%TYPE,
         p_kontakt IN dodavatel.kontakt%TYPE
     );
@@ -316,13 +317,21 @@ AS
     END insert_plat_zamestnancu;
 
     PROCEDURE insert_dodavatel(
+        p_id IN dodavatel.id%TYPE DEFAULT NULL,
         p_nazev IN dodavatel.nazev%TYPE,
         p_kontakt IN dodavatel.kontakt%TYPE
-    )
-    IS
-    BEGIN
-        INSERT INTO dodavatel (nazev, kontakt)
-        VALUES (p_nazev, p_kontakt);
+    ) IS
+        BEGIN
+            IF p_id IS NULL THEN
+                INSERT INTO dodavatel (nazev, kontakt)
+                VALUES (p_nazev, p_kontakt);
+            ELSE
+                 INSERT INTO dodavatel (id, nazev, kontakt)
+                VALUES (p_id, p_nazev, p_kontakt);
+            END IF;
+        EXCEPTION
+            WHEN DUP_VAL_ON_INDEX THEN
+                raise_application_error(-20009, 'Duplikátní hodnota pro dodavatela');
     END insert_dodavatel;
 
 END insert_package;
