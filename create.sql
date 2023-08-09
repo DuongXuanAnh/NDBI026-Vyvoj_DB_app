@@ -1,16 +1,9 @@
--- Autogenerate ID using sequence
-CREATE SEQUENCE jidelni_listek_id_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
-CREATE SEQUENCE stoly_id_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
-CREATE SEQUENCE objednavka_id_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
-CREATE SEQUENCE objednavka_jidel_id_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
-CREATE SEQUENCE oddeleni_id_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
-CREATE SEQUENCE pozice_id_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
-CREATE SEQUENCE zamestnanci_id_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
-CREATE SEQUENCE dodavatel_id_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
+-- Autogenerate ID using a single universal sequence
+CREATE SEQUENCE universal_id_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 
 -- Tabulka jidelni_listek
 CREATE TABLE jidelni_listek (
-    id NUMBER DEFAULT jidelni_listek_id_seq.NEXTVAL PRIMARY KEY,
+    id NUMBER DEFAULT universal_id_seq.NEXTVAL PRIMARY KEY,
     nazev VARCHAR2(100) NOT NULL,
     popis VARCHAR2(500),
     cena DECIMAL(8,2) NOT NULL CHECK (cena >= 0),
@@ -22,7 +15,7 @@ ON jidelni_listek (nazev);
 
 -- Tabulka stolu
 CREATE TABLE stoly (
-    id NUMBER DEFAULT stoly_id_seq.NEXTVAL PRIMARY KEY,
+    id NUMBER DEFAULT universal_id_seq.NEXTVAL PRIMARY KEY,
     identifikator VARCHAR2(50) NOT NULL UNIQUE,
     pocet_mist NUMBER NOT NULL,
     umisteni VARCHAR2(100) NOT NULL
@@ -30,7 +23,7 @@ CREATE TABLE stoly (
 
 -- Tabulka objednavka
 CREATE TABLE objednavka (
-    id NUMBER DEFAULT objednavka_id_seq.NEXTVAL PRIMARY KEY,
+    id NUMBER DEFAULT universal_id_seq.NEXTVAL PRIMARY KEY,
     datum_cas TIMESTAMP NOT NULL,
     stul_id NUMBER NOT NULL,
     stav VARCHAR2(20),  -- 'nový', 'zpracovává se', 'hotový', 'zaplaceno'
@@ -58,13 +51,13 @@ CREATE INDEX idx_objednavka_jidel_objednavka_id ON objednavka_jidel(objednavka_i
 
 -- Tabulka oddeleni
 CREATE TABLE oddeleni (
-    id NUMBER DEFAULT oddeleni_id_seq.NEXTVAL PRIMARY KEY,
+    id NUMBER DEFAULT universal_id_seq.NEXTVAL PRIMARY KEY,
     nazev VARCHAR2(100) NOT NULL UNIQUE
 );
 
 -- Tabulka pozice
 CREATE TABLE pozice (
-    id NUMBER DEFAULT pozice_id_seq.NEXTVAL PRIMARY KEY,
+    id NUMBER DEFAULT universal_id_seq.NEXTVAL PRIMARY KEY,
     nazev VARCHAR2(50) NOT NULL,
     oddeleni_id NUMBER NOT NULL,
     FOREIGN KEY (oddeleni_id) REFERENCES oddeleni(id),
@@ -75,7 +68,7 @@ CREATE INDEX idx_pozice_oddeleni_id ON pozice(oddeleni_id);
 
 -- Tabulka zamestnancu
 CREATE TABLE zamestnanci (
-    id NUMBER DEFAULT zamestnanci_id_seq.NEXTVAL PRIMARY KEY,
+    id NUMBER DEFAULT universal_id_seq.NEXTVAL PRIMARY KEY,
     jmeno VARCHAR2(100) NOT NULL,
     prijmeni VARCHAR2(100) NOT NULL,
     rodne_cislo VARCHAR2(11) NOT NULL UNIQUE,
@@ -99,7 +92,7 @@ CREATE INDEX idx_plat_zamestnancu_zamestnanec_id ON plat_zamestnancu(zamestnanec
 
 -- Tabulka dodavatelu
 CREATE TABLE dodavatel (
-    id NUMBER DEFAULT dodavatel_id_seq.NEXTVAL PRIMARY KEY,
+    id NUMBER DEFAULT universal_id_seq.NEXTVAL PRIMARY KEY,
     nazev VARCHAR2(100) NOT NULL,
     kontakt VARCHAR2(200)
 );
