@@ -31,10 +31,10 @@ EXECUTE insert_package.insert_oddeleni(p_id => 3, p_nazev => 'Management a admin
 EXECUTE insert_package.insert_oddeleni(p_id => 4, p_nazev => 'Bar');
 
 -- Pozice
-EXECUTE insert_package.insert_pozice(p_nazev => 'Šéfkuchař', p_oddeleni_id => 1);
-EXECUTE insert_package.insert_pozice(p_nazev => 'Číšník', p_oddeleni_id => 2);
-EXECUTE insert_package.insert_pozice(p_nazev => 'Manažer', p_oddeleni_id => 3);
-EXECUTE insert_package.insert_pozice(p_nazev => 'Barman', p_oddeleni_id => 4);
+EXECUTE insert_package.insert_pozice(p_id => 1, p_nazev => 'Šéfkuchař', p_oddeleni_id => 1);
+EXECUTE insert_package.insert_pozice(p_id => 2, p_nazev => 'Číšník', p_oddeleni_id => 2);
+EXECUTE insert_package.insert_pozice(p_id => 3, p_nazev => 'Manažer', p_oddeleni_id => 3);
+EXECUTE insert_package.insert_pozice(p_id => 4, p_nazev => 'Barman', p_oddeleni_id => 4);
 
 -- Zamestnanci
 EXECUTE insert_package.insert_zamestnanci(p_id => 1, p_jmeno => 'Jan', p_prijmeni => 'Novak', p_rodne_cislo => '12345678901', p_pozice_id => 1);
