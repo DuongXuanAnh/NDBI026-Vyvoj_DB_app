@@ -2,7 +2,6 @@
 CREATE SEQUENCE jidelni_listek_id_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 CREATE SEQUENCE stoly_id_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 CREATE SEQUENCE objednavka_id_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
-CREATE SEQUENCE objednavka_jidel_id_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 CREATE SEQUENCE oddeleni_id_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 CREATE SEQUENCE pozice_id_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
 CREATE SEQUENCE zamestnanci_id_seq START WITH 1 INCREMENT BY 1 NOMAXVALUE;
@@ -181,13 +180,16 @@ AS
         p_cena IN jidelni_listek.cena%TYPE
     )
     IS
+      v_new_id NUMBER;
     BEGIN
         IF p_id IS NULL THEN
+            SELECT jidelni_listek_id_seq.NEXTVAL INTO v_new_id FROM dual;
             INSERT INTO jidelni_listek (nazev, popis, cena)
             VALUES (p_nazev, p_popis, p_cena);
         ELSE
             INSERT INTO jidelni_listek (id, nazev, popis, cena)
             VALUES (p_id, p_nazev, p_popis, p_cena);
+            SELECT jidelni_listek_id_seq.NEXTVAL INTO v_new_id FROM dual;
         END IF;
     EXCEPTION
         WHEN DUP_VAL_ON_INDEX THEN
@@ -201,13 +203,16 @@ AS
         p_umisteni IN stoly.umisteni%TYPE
     )
     IS
+      v_new_id NUMBER;
     BEGIN
         IF p_id IS NULL THEN
+            SELECT stoly_id_seq.NEXTVAL INTO v_new_id FROM dual;
             INSERT INTO stoly (identifikator, pocet_mist, umisteni)
             VALUES (p_identifikator, p_pocet_mist, p_umisteni);
         ELSE
             INSERT INTO stoly (id, identifikator, pocet_mist, umisteni)
             VALUES (p_id, p_identifikator, p_pocet_mist, p_umisteni);
+            SELECT stoly_id_seq.NEXTVAL INTO v_new_id FROM dual;
         END IF;
     EXCEPTION
         WHEN DUP_VAL_ON_INDEX THEN
@@ -221,13 +226,16 @@ AS
         p_stav IN objednavka.stav%TYPE
     )
     IS
+      v_new_id NUMBER;
     BEGIN
         IF p_id IS NULL THEN
+            SELECT objednavka_id_seq.NEXTVAL INTO v_new_id FROM dual;
             INSERT INTO objednavka (datum_cas, stul_id, stav)
             VALUES (p_datum_cas, p_stul_id, p_stav);
         ELSE
             INSERT INTO objednavka (id, datum_cas, stul_id, stav)
             VALUES (p_id, p_datum_cas, p_stul_id, p_stav);
+            SELECT objednavka_id_seq.NEXTVAL INTO v_new_id FROM dual;
         END IF;
     EXCEPTION
         WHEN OTHERS THEN
@@ -254,13 +262,16 @@ AS
         p_nazev IN oddeleni.nazev%TYPE
     )
     IS
+      v_new_id NUMBER;
     BEGIN
         IF p_id IS NULL THEN
+            SELECT oddeleni_id_seq.NEXTVAL INTO v_new_id FROM dual;
             INSERT INTO oddeleni (nazev)
             VALUES (p_nazev);
         ELSE
             INSERT INTO oddeleni (id, nazev)
             VALUES (p_id, p_nazev);
+            SELECT oddeleni_id_seq.NEXTVAL INTO v_new_id FROM dual;
         END IF;
     EXCEPTION
         WHEN DUP_VAL_ON_INDEX THEN
@@ -274,13 +285,16 @@ AS
         p_oddeleni_id IN pozice.oddeleni_id%TYPE
     )
     IS
+      v_new_id NUMBER;
     BEGIN
         IF p_id IS NULL THEN
+            SELECT pozice_id_seq.NEXTVAL INTO v_new_id FROM dual;
             INSERT INTO pozice (nazev, oddeleni_id)
             VALUES (p_nazev, p_oddeleni_id);
         ELSE
             INSERT INTO pozice (id, nazev, oddeleni_id)
             VALUES (p_id, p_nazev, p_oddeleni_id);
+            SELECT pozice_id_seq.NEXTVAL INTO v_new_id FROM dual;
         END IF;
     EXCEPTION
         WHEN DUP_VAL_ON_INDEX THEN
@@ -331,13 +345,16 @@ AS
         p_nazev IN dodavatel.nazev%TYPE,
         p_kontakt IN dodavatel.kontakt%TYPE
     ) IS
+      v_new_id NUMBER;
         BEGIN
             IF p_id IS NULL THEN
+                SELECT dodavatel_id_seq.NEXTVAL INTO v_new_id FROM dual;
                 INSERT INTO dodavatel (nazev, kontakt)
                 VALUES (p_nazev, p_kontakt);
             ELSE
-                 INSERT INTO dodavatel (id, nazev, kontakt)
+                INSERT INTO dodavatel (id, nazev, kontakt)
                 VALUES (p_id, p_nazev, p_kontakt);
+                SELECT dodavatel_id_seq.NEXTVAL INTO v_new_id FROM dual;
             END IF;
         EXCEPTION
             WHEN DUP_VAL_ON_INDEX THEN
@@ -346,7 +363,6 @@ AS
 
 END insert_package;
 /
-
 
 CREATE OR REPLACE package conversion_package
 AS

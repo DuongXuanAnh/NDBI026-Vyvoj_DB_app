@@ -12,7 +12,6 @@ drop package conversion_package;
 drop sequence jidelni_listek_id_seq;
 drop sequence stoly_id_seq;
 drop sequence objednavka_id_seq;
-drop sequence objednavka_jidel_id_seq;
 drop sequence oddeleni_id_seq;
 drop sequence pozice_id_seq;
 drop sequence zamestnanci_id_seq;
