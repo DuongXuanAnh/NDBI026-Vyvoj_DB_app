@@ -48,8 +48,7 @@ CREATE TABLE objednavka_jidel (
     jidlo_id NUMBER NOT NULL,
     pocet NUMBER NOT NULL CHECK (pocet > 0),
     FOREIGN KEY (objednavka_id) REFERENCES objednavka(id) ON DELETE CASCADE,
-    FOREIGN KEY (jidlo_id) REFERENCES jidelni_listek(id),
-    PRIMARY KEY (objednavka_id, jidlo_id)
+    FOREIGN KEY (jidlo_id) REFERENCES jidelni_listek(id)
 );
 
 CREATE INDEX idx_objednavka_jidel_jidlo_id ON objednavka_jidel(jidlo_id);
@@ -92,7 +91,7 @@ CREATE TABLE plat_zamestnancu (
     mesic NUMBER NOT NULL CHECK (mesic BETWEEN 1 AND 12),
     plat DECIMAL(8, 2) CHECK (plat >= 0),
     PRIMARY KEY (zamestnanec_id, rok, mesic),
-    FOREIGN KEY (zamestnanec_id) REFERENCES zamestnanci(id)
+    FOREIGN KEY (zamestnanec_id) REFERENCES zamestnanci(id) ON DELETE CASCADE
 );
 CREATE INDEX idx_plat_zamestnancu_zamestnanec_id ON plat_zamestnancu(zamestnanec_id);
 
@@ -448,4 +447,22 @@ AS
 
 
 END conversion_package;
+/
+
+-- Funkce ziskat_celkovy_plat vrátí celkový plat zaměstnance za daný rok.
+CREATE OR REPLACE FUNCTION ziskat_celkovy_plat (p_zamestnanec_id NUMBER, p_rok NUMBER) RETURN DECIMAL IS
+    celkovy_plat DECIMAL(8, 2);
+BEGIN
+    SELECT SUM(plat) INTO celkovy_plat
+    FROM plat_zamestnancu
+    WHERE zamestnanec_id = p_zamestnanec_id AND rok = p_rok;
+    
+    RETURN celkovy_plat;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN NULL;
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Došlo k chybě: ' || SQLERRM);
+        RETURN NULL;
+END;
 /

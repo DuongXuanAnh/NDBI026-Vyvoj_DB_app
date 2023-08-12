@@ -8,6 +8,8 @@ EXECUTE insert_package.insert_jidelni_listek(p_nazev => 'Pho Bo', p_popis => 'Vi
 UPDATE jidelni_listek SET cena = 150.00 WHERE id = 3;
 -- Zkusíme smazat jídlo, které má id 4
 DELETE FROM jidelni_listek WHERE id = 4;
+-- Zkusíme smazat jídlo, které má id 10
+DELETE FROM jidelni_listek WHERE id = 10;
 -- Jak vypadá jídelní lístek po změnách?
 SELECT * FROM jidelni_listek;
 
@@ -31,7 +33,7 @@ SELECT * FROM zamestnanci;
 EXECUTE insert_package.insert_zamestnanci(p_jmeno => 'David', p_prijmeni => 'Duong', p_rodne_cislo => '9809303658', p_pozice_id => 1);
 -- Změníme pozici existujícího zaměstnance
 UPDATE zamestnanci SET pozice_id = 2 WHERE id = 5;
--- Zkusíme smazat zaměstnance, který má id 7
+-- Zkusíme smazat zaměstnance, který má id 2
 DELETE FROM zamestnanci WHERE id = 2;
 -- Jak vypadají zaměstnanci po změnách?
 SELECT * FROM zamestnanci;
@@ -56,8 +58,8 @@ SELECT * FROM objednavka_jidel;
 EXECUTE insert_package.insert_objednavka_jidel(p_objednavka_id => 1, p_jidlo_id => 2, p_pocet => 2);
 -- Změníme počet objednaných jídel pro existující objednávku
 UPDATE objednavka_jidel SET pocet = 4 WHERE objednavka_id = 2 AND jidlo_id = 3;
--- Zkusíme smazat objednávku jídel, která má objednavka_id 3
-DELETE FROM objednavka_jidel WHERE objednavka_id = 3;
+-- Zkusíme smazat objednávku jídel, která má objednavka_id 4
+DELETE FROM objednavka_jidel WHERE objednavka_id = 4;
 -- Jak vypadají objednávky jídel po změnách?
 SELECT * FROM objednavka_jidel;
 
@@ -100,7 +102,11 @@ SELECT * FROM dodavatel;
 EXECUTE insert_package.insert_dodavatel(p_nazev => 'Fresh Fruits Ltd.', p_kontakt => 'info@freshfruits.com');
 -- Změníme kontakt existujícího dodavatele
 UPDATE dodavatel SET kontakt = 'sales@vegcompany.com' WHERE id = 2;
--- Zkusíme smazat dodavatele, který má id 3
-DELETE FROM dodavatel WHERE id = 3;
+-- Zkusíme smazat dodavatele, který má id 2
+DELETE FROM dodavatel WHERE id = 2;
 -- Jak vypadají dodavatelé po změnách?
 SELECT * FROM dodavatel;
+
+-- Otestování funkci ziskat_celkovy_plat
+SELECT zamestnanci.jmeno, zamestnanci.prijmeni, ziskat_celkovy_plat(zamestnanci.id, 2023) AS celkovy_plat
+FROM zamestnanci;
