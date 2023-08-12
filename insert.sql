@@ -72,10 +72,10 @@ EXECUTE insert_package.insert_objednavka_jidel(p_objednavka_id => 3, p_jidlo_id 
 EXECUTE insert_package.insert_objednavka_jidel(p_objednavka_id => 4, p_jidlo_id => 4, p_pocet => 3);
 EXECUTE insert_package.insert_objednavka_jidel(p_objednavka_id => 5, p_jidlo_id => 5, p_pocet => 5);
 
-SELECT * FROM JIDELNI_LISTEK;
-SELECT * FROM DODAVATEL;
-SELECT * FROM stoly;
-SELECT * FROM pozice;
-SELECT * FROM zamestnanci;
-SELECT * FROM objednavka;
-SELECT * FROM objednavka_jidel;
+-- SELECT * FROM JIDELNI_LISTEK;
+-- SELECT * FROM DODAVATEL;
+-- SELECT * FROM stoly;
+-- SELECT * FROM pozice;
+-- SELECT * FROM zamestnanci;
+-- SELECT * FROM objednavka;
+-- SELECT * FROM objednavka_jidel;

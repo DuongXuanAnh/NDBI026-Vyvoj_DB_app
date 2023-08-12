@@ -23,7 +23,7 @@ ON jidelni_listek (nazev);
 CREATE TABLE stoly (
     id NUMBER DEFAULT stoly_id_seq.NEXTVAL PRIMARY KEY,
     identifikator VARCHAR2(50) NOT NULL UNIQUE,
-    pocet_mist NUMBER NOT NULL,
+    pocet_mist NUMBER NOT NULL CHECK (pocet_mist > 0),
     umisteni VARCHAR2(100) NOT NULL
 );
 
@@ -32,7 +32,7 @@ CREATE TABLE objednavka (
     id NUMBER DEFAULT objednavka_id_seq.NEXTVAL PRIMARY KEY,
     datum_cas TIMESTAMP NOT NULL,
     stul_id NUMBER NOT NULL,
-    stav VARCHAR2(20),  -- 'nový', 'zpracovává se', 'hotový', 'zaplaceno'
+    stav VARCHAR2(20) CHECK (stav IN ('nový', 'zpracovává se', 'hotový', 'zaplaceno')),
     FOREIGN KEY (stul_id) REFERENCES stoly(id)
 );
 
